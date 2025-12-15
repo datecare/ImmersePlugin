@@ -1,13 +1,13 @@
 package me.randjo.commands;
 
 import me.randjo.jobs.JobsPlugin;
-import static me.randjo.restriction.RestrictionListener.createJobMenu;
-import static me.randjo.jobs.JobsListener.createJobShop;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import static me.randjo.jobs.JobsListener.createJobShop;
+import static me.randjo.restriction.RestrictionListener.createJobMenu;
 
 public class JobCommandExecutor implements CommandExecutor {
     private JobsPlugin jobPlugin;

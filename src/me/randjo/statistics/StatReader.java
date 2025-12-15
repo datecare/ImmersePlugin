@@ -1,18 +1,14 @@
 package me.randjo.statistics;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import me.randjo.MainPlugin;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

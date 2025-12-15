@@ -1,13 +1,5 @@
 package me.randjo.statistics;
 
-import static me.randjo.commands.MainCommandExecutor.createHelp;
-import static me.randjo.statistics.StatReader.checkPlayerStats;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.HoverEvent.Action;
-import net.md_5.bungee.api.chat.hover.content.Content;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,11 +10,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.Sound;
-
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static me.randjo.commands.MainCommandExecutor.createHelp;
+import static me.randjo.statistics.StatReader.checkPlayerStats;
 
 public class Achievements implements Listener  {
     public static AchievementHolder[] achievementHolders = new AchievementHolder[] {

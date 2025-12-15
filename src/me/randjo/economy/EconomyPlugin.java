@@ -2,6 +2,7 @@ package me.randjo.economy;
 
 import me.randjo.MainPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

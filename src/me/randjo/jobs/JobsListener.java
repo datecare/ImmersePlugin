@@ -1,17 +1,11 @@
 package me.randjo.jobs;
 
 import me.randjo.MainPlugin;
-import static me.randjo.commands.MainCommandExecutor.createHelp;
-import static me.randjo.economy.PlayerGainMoney.getLocationKey;
-import static me.randjo.restriction.RestrictionListener.createJobMenu;
-import static me.randjo.economy.PlayerGainMoney.getPlacedBlocks;
-import static org.bukkit.Material.*;
-
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.data.type.Snow;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -26,28 +20,28 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.block.data.Ageable;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.Material.*;
-import org.bukkit.spawner.Spawner;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.io.File;
-import java.util.*;
-import java.util.function.IntToDoubleFunction;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static me.randjo.commands.MainCommandExecutor.createHelp;
+import static me.randjo.economy.PlayerGainMoney.getLocationKey;
+import static me.randjo.economy.PlayerGainMoney.getPlacedBlocks;
+import static me.randjo.restriction.RestrictionListener.createJobMenu;
+import static org.bukkit.Material.*;
 
 public class JobsListener implements Listener {
 
@@ -1211,20 +1205,25 @@ public class JobsListener implements Listener {
         }
     }
 
-    // Block interactions with non-spawn egg villagers
-    @EventHandler
+    //TODO
+    /*
+// Block interactions with non-spawn egg villagers
+        @EventHandler
     public void onPlayerInteractWithVillager(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof Villager villager) {
             PersistentDataContainer data = villager.getPersistentDataContainer();
             if (!data.has(spawnEggKey, PersistentDataType.BYTE)) {
                 event.setCancelled(true);
                 Player player = event.getPlayer();
-                player.sendMessage("§cOvaj villager je debil. Ne možeš interaktovati sa njim.");
+                player.sendMessage("§cOvaj villager je bogalj. Ne možeš interaktovati sa njim.");
             }
         }
     }
 
-    @EventHandlerx
+     */
+
+
+    @EventHandler
     public void onVillagerBreed(EntityBreedEvent event) {
         // Ensure the breeding entities are villagers
         if (event.getEntityType() == EntityType.VILLAGER

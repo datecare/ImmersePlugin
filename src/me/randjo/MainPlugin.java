@@ -1,27 +1,25 @@
 package me.randjo;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import com.sun.tools.javac.Main;
 import me.randjo.commands.*;
 import me.randjo.economy.EconomyPlugin;
 import me.randjo.economy.PlayerGainMoney;
 import me.randjo.filler.RandomListener;
+import me.randjo.filler.crazymobs.*;
 import me.randjo.jobs.JobsListener;
 import me.randjo.jobs.JobsPlugin;
 import me.randjo.restriction.RestrictionListener;
 import me.randjo.restriction.RestrictionPlugin;
 import me.randjo.statistics.Achievements;
 import me.randjo.statistics.StatReader;
-import org.bukkit.*;
-import org.bukkit.inventory.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.earth2me.essentials.Essentials;
 
 public class MainPlugin extends JavaPlugin implements Listener {
     static public EconomyPlugin economyPlugin;
@@ -32,6 +30,7 @@ public class MainPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        Bukkit.broadcastMessage("ImmersePlugin reloaded!");
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
         economyPlugin = new EconomyPlugin(this);
         restrictionPlugin = new RestrictionPlugin(this);
@@ -89,6 +88,14 @@ public class MainPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new RandomListener(this, economyPlugin), this);
         getServer().getPluginManager().registerEvents(new JobsListener(this, jobsPlugin), this);
         getServer().getPluginManager().registerEvents(new Achievements(), this);
+
+        // Register Listeners for Special Mob Events
+        getServer().getPluginManager().registerEvents(new CreeperListener(this), this);
+        getServer().getPluginManager().registerEvents(new GhastListener(this), this);
+        getServer().getPluginManager().registerEvents(new PigListener(this), this);
+        getServer().getPluginManager().registerEvents(new WitherSkeletonListener(this), this);
+        getServer().getPluginManager().registerEvents(new ZombieListener(this), this);
+
     }
 
     @EventHandler

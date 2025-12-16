@@ -1,0 +1,60 @@
+main: me.randjo.MainPlugin
+name: ImmersePlugin
+version: 1.0
+author: randjo
+api-version: 1.21.4
+depend: [ProtocolLib]
+commands:
+  msg:
+    description: Slanje poruka
+    usage: /msg <igrač> <poruka>
+  help:
+    description: Detaljnije objašnjava komande
+    usage: /help <komanda>
+  spawn:
+    description: Teleportuje na spawn
+    usage: /spawn
+  balance:
+    description: komanda prikazuje kolicinu novca
+    usage: /balance
+    aliases: [bal]
+  pay:
+    description: komanda salje novac drugom igracu
+    usage: /pay <igrač> <količina>
+  givemoney:
+    description: dalje novac
+    usage: /givemoney <igrač> <količina>
+  baltop:
+    description: komanda vraca top listu najbogatijih igraca
+    usage: /baltop
+  changelog:
+    description: komanda ispisuje najnovije dodate stvari
+    usage: /changelog
+  enchantingtable:
+    description: kupovina ench table
+    usage: /enchantingtable
+  achievements:
+    description: otvara achievement menu
+    usage: /achievements
+    aliases: [ach]
+  jobs:
+    description: otvara jobs menu
+    usage: /jobs
+  setjob:
+    description: postavlja job igracu na odredjenu konfiguraciju
+    usage: /setjob <igrač> <job> <level> <xp>
+  addjob:
+    description: dodaje igraču posao
+    usage: /addjob <igrač> <posao>
+  removejob:
+    description: skida igraču posao
+    usage: /removejob <igrač> <posao>
+  shop:
+    description: otvara shop menu
+    usage: /shop
+  jobshop:
+    description: otvara job specific shop
+    usage: /jobshop
+  addhome:
+    description: dodaje home
+    usage: /addhome <player>

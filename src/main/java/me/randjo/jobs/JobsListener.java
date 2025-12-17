@@ -32,10 +32,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static me.randjo.commands.MainCommandExecutor.createHelp;
 import static me.randjo.economy.PlayerGainMoney.getLocationKey;
@@ -50,10 +47,10 @@ public class JobsListener implements Listener {
 
     private final JobsPlugin jobsPlugin;
     private static MainPlugin plugin;
-    private final HashMap<Class<? extends Entity>, Integer> hunterXP;
-    private final HashMap<Material, Double> minerXP;
-    private final HashMap<Material, Double> cropXP;
-    private final HashMap<Class<? extends Entity>, Double> breedXP;
+    public final Map<EntityType, Integer> hunterXP = new EnumMap<>(EntityType.class);
+    public final Map<Material, Double> minerXP = new EnumMap<>(Material.class);
+    public final Map<Material, Double> cropXP = new EnumMap<>(Material.class);
+    public final Map<EntityType, Double> breedXP = new EnumMap<>(EntityType.class);
     private static NamespacedKey spawnEggKey;
     private static NamespacedKey spawnerKey;
 
@@ -61,174 +58,9 @@ public class JobsListener implements Listener {
     public JobsListener(MainPlugin mainPlugin, JobsPlugin jobsPlugin) {
         this.jobsPlugin = jobsPlugin;
         this.plugin = mainPlugin;
+        jobsPlugin.loadListener(this);
         spawnEggKey = new NamespacedKey(plugin, "spawn_egg_villager");
         spawnerKey = new NamespacedKey(plugin, "spawner");
-        {
-        hunterXP = new HashMap<>();
-        hunterXP.put(Allay.class, 3);
-        hunterXP.put(Armadillo.class, 1);
-        hunterXP.put(Axolotl.class, 2);
-        hunterXP.put(Bat.class, 3);
-        hunterXP.put(Bee.class, 1);
-        hunterXP.put(Blaze.class, 3);
-        hunterXP.put(Bogged.class, 3);
-        hunterXP.put(Breeze.class, 5);
-        hunterXP.put(Camel.class, 2);
-        hunterXP.put(Cat.class, 1);
-        hunterXP.put(CaveSpider.class, 3);
-        hunterXP.put(Chicken.class, 1);
-        hunterXP.put(Cod.class, 1);
-        hunterXP.put(Cow.class, 1);
-        hunterXP.put(Creeper.class, 3);
-        hunterXP.put(Dolphin.class, 1);
-        hunterXP.put(Donkey.class, 1);
-        hunterXP.put(Drowned.class, 3);
-        hunterXP.put(ElderGuardian.class, 25);
-        hunterXP.put(EnderDragon.class, 1000);
-        hunterXP.put(Enderman.class, 6);
-        hunterXP.put(Endermite.class, 1);
-        hunterXP.put(Evoker.class, 10);
-        hunterXP.put(Fox.class, 1);
-        hunterXP.put(Frog.class, 1);
-        hunterXP.put(Ghast.class, 4);
-        hunterXP.put(GlowSquid.class, 2);
-        hunterXP.put(Goat.class, 1);
-        hunterXP.put(Guardian.class, 5);
-        hunterXP.put(Hoglin.class, 4);
-        hunterXP.put(Horse.class, 1);
-        hunterXP.put(Husk.class, 3);
-        hunterXP.put(IronGolem.class, 3);
-        hunterXP.put(Llama.class, 1);
-        hunterXP.put(MagmaCube.class, 1);
-        hunterXP.put(Mule.class, 1);
-        hunterXP.put(MushroomCow.class, 1);
-        hunterXP.put(Ocelot.class, 1);
-        hunterXP.put(Panda.class, 2);
-        hunterXP.put(Parrot.class, 1);
-        hunterXP.put(Phantom.class, 3);
-        hunterXP.put(Pig.class, 1);
-        hunterXP.put(PigZombie.class, 3);
-        hunterXP.put(Piglin.class, 3);
-        hunterXP.put(PiglinBrute.class, 7);
-        hunterXP.put(Pillager.class, 4);
-        hunterXP.put(PolarBear.class, 3);
-        hunterXP.put(PufferFish.class, 1);
-        hunterXP.put(Rabbit.class, 1);
-        hunterXP.put(Ravager.class, 15);
-        hunterXP.put(Salmon.class, 1);
-        hunterXP.put(Sheep.class, 1);
-        hunterXP.put(Shulker.class, 10);
-        hunterXP.put(Silverfish.class, 1);
-        hunterXP.put(Skeleton.class, 3);
-        hunterXP.put(SkeletonHorse.class, 5);
-        hunterXP.put(Slime.class, 2);
-        hunterXP.put(Sniffer.class, 2);
-        hunterXP.put(Spider.class, 2);
-        hunterXP.put(Squid.class, 1);
-        hunterXP.put(Stray.class, 3);
-        hunterXP.put(Strider.class, 1);
-        hunterXP.put(TropicalFish.class, 1);
-        hunterXP.put(TraderLlama.class, 1);
-        hunterXP.put(Turtle.class, 3);
-        hunterXP.put(Vex.class, 2);
-        hunterXP.put(Vindicator.class, 4);
-        hunterXP.put(Warden.class, 50);
-        hunterXP.put(Witch.class, 4);
-        hunterXP.put(Wither.class, 300);
-        hunterXP.put(WitherSkeleton.class, 7);
-        hunterXP.put(Wolf.class, 1);
-        hunterXP.put(Zoglin.class, 8);
-        hunterXP.put(Zombie.class, 3);
-        hunterXP.put(ZombieVillager.class, 2);
-    }
-        minerXP = new HashMap<>();
-        minerXP.put(Material.ANDESITE, 0.5);
-        minerXP.put(Material.TUFF, 0.5);
-        minerXP.put(Material.STONE, 0.3);
-        minerXP.put(Material.DEEPSLATE, 0.5);
-        minerXP.put(Material.SMOOTH_BASALT, 0.4);
-        minerXP.put(Material.CALCITE, 0.4);
-        minerXP.put(Material.GRANITE, 0.4);
-        minerXP.put(Material.DIORITE, 0.4);
-        minerXP.put(Material.COAL_ORE, 0.5);
-        minerXP.put(Material.DEEPSLATE_COAL_ORE, 1.5);
-        minerXP.put(Material.REDSTONE_ORE, 1.0);
-        minerXP.put(Material.DEEPSLATE_REDSTONE_ORE, 1.0);
-        minerXP.put(Material.COPPER_ORE, 0.5);
-        minerXP.put(Material.DEEPSLATE_COPPER_ORE, 0.5);
-        minerXP.put(Material.IRON_ORE, 1.5);
-        minerXP.put(Material.DEEPSLATE_IRON_ORE, 1.5);
-        minerXP.put(Material.GOLD_ORE, 1.5);
-        minerXP.put(Material.DEEPSLATE_GOLD_ORE, 1.5);
-        minerXP.put(Material.LAPIS_ORE, 5.0);
-        minerXP.put(Material.DEEPSLATE_LAPIS_ORE, 5.0);
-        minerXP.put(Material.DIAMOND_ORE, 15.0);
-        minerXP.put(Material.DEEPSLATE_DIAMOND_ORE, 15.0);
-        minerXP.put(Material.EMERALD_ORE, 12.25);
-        minerXP.put(Material.DEEPSLATE_EMERALD_ORE, 12.25);
-        minerXP.put(Material.NETHER_QUARTZ_ORE, 0.75);
-        minerXP.put(Material.NETHERRACK, 0.15);
-        minerXP.put(Material.GLOWSTONE, 0.75);
-        minerXP.put(Material.AMETHYST_BLOCK, 0.5);
-        minerXP.put(Material.BUDDING_AMETHYST, 0.6);
-        minerXP.put(Material.ANCIENT_DEBRIS, 14.0);
-
-        cropXP = new HashMap<>();
-        cropXP.put(Material.WHEAT, 0.5);
-        cropXP.put(Material.CARROTS, 0.5);
-        cropXP.put(Material.POTATOES, 0.5);
-        cropXP.put(Material.BEETROOTS, 0.5);
-        cropXP.put(Material.NETHER_WART, 4.0);
-        cropXP.put(Material.MELON, 2.0);
-        cropXP.put(Material.PUMPKIN, 2.0);
-        cropXP.put(Material.COCOA, 0.75);
-        cropXP.put(Material.SUGAR_CANE, 0.5);
-        cropXP.put(Material.CHORUS_FLOWER, 1.5);
-        cropXP.put(OAK_LOG, 0.5);
-        cropXP.put(DARK_OAK_LOG, 0.3);
-        cropXP.put(JUNGLE_LOG, 0.3);
-        cropXP.put(BIRCH_LOG, 0.5);
-        cropXP.put(ACACIA_LOG, 0.5);
-        cropXP.put(SPRUCE_LOG, 0.4);
-        cropXP.put(CHERRY_LOG, 0.5);
-        cropXP.put(MANGROVE_LOG, 0.5);
-        cropXP.put(ACACIA_LEAVES, 0.1);
-        cropXP.put(AZALEA_LEAVES, 0.1);
-        cropXP.put(JUNGLE_LEAVES, 0.1);
-        cropXP.put(OAK_LEAVES, 0.1);
-        cropXP.put(BIRCH_LEAVES, 0.1);
-        cropXP.put(SPRUCE_LEAVES, 0.1);
-        cropXP.put(CHERRY_LEAVES, 0.1);
-        cropXP.put(MANGROVE_LEAVES, 0.1);
-        cropXP.put(DARK_OAK_LEAVES, 0.1);
-        cropXP.put(FLOWERING_AZALEA_LEAVES, 0.1);
-        cropXP.put(CRIMSON_STEM, 0.6);
-        cropXP.put(WARPED_STEM, 0.6);
-
-        breedXP = new HashMap<>();
-        breedXP.put(Horse.class, 3.0);
-        breedXP.put(Donkey.class, 3.0);
-        breedXP.put(Cow.class, 1.0);
-        breedXP.put(Goat.class, 3.0);
-        breedXP.put(MushroomCow.class, 4.0);
-        breedXP.put(Sheep.class, 1.0);
-        breedXP.put(Pig.class, 1.0);
-        breedXP.put(Chicken.class, 0.5);
-        breedXP.put(Wolf.class, 2.0);
-        breedXP.put(Cat.class, 2.0);
-        breedXP.put(Axolotl.class, 5.0);
-        breedXP.put(Llama.class, 4.0);
-        breedXP.put(Rabbit.class, 2.0);
-        breedXP.put(Turtle.class, 1.5);
-        breedXP.put(Panda.class, 3.0);
-        breedXP.put(Fox.class, 2.5);
-        breedXP.put(Bee.class, 2.0);
-        breedXP.put(Strider.class, 5.0);
-        breedXP.put(Hoglin.class, 5.0);
-        breedXP.put(Frog.class, 3.0);
-        breedXP.put(Camel.class, 7.0);
-        breedXP.put(Sniffer.class, 10.0);
-
     }
 
     public String slotToName(int slot) {
@@ -731,13 +563,7 @@ public class JobsListener implements Listener {
 
 
     private float getRewardForEntity(Entity entity) {
-        // Iterate through the map and check assignability
-        for (Map.Entry<Class<? extends Entity>, Integer> entry : hunterXP.entrySet()) {
-            if (entry.getKey().isAssignableFrom(entity.getClass())) {
-                return entry.getValue();
-            }
-        }
-        return 0; // No reward found
+        return hunterXP.getOrDefault(entity.getType(), 0);
     }
 
     @EventHandler
@@ -1185,13 +1011,7 @@ public class JobsListener implements Listener {
     }
 
     private double getRewardForBreeding(Entity entity) {
-        // Iterate through the map and check assignability
-        for (Map.Entry<Class<? extends Entity>, Double> entry : breedXP.entrySet()) {
-            if (entry.getKey().isAssignableFrom(entity.getClass())) {
-                return entry.getValue();
-            }
-        }
-        return 0; // No reward found
+        return breedXP.getOrDefault(entity.getType(), 0.0);
     }
 
 

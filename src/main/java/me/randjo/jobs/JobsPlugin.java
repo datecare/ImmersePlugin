@@ -2,8 +2,10 @@ package me.randjo.jobs;
 
 import me.randjo.MainPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -23,9 +25,84 @@ public class JobsPlugin {
     private static FileConfiguration selectedJobsConfig;
     private static File silkFile;
     private static FileConfiguration silkDataConfig;
+    private JobsListener jobsListener;
+    private File jobFile;
+    private FileConfiguration jobConfig;
 
+    public void loadListener(JobsListener listener) {
+        jobsListener = listener;
+        setupConfig();
+        loadRewards();
+        plugin.saveResource("jobSettings.yml", false);
+    }
 
+    private void setupConfig() {
+        jobFile = new File(plugin.getDataFolder(), "jobSettings.yml");
+        if (!jobFile.exists()) {
+            plugin.saveResource("jobSettings.yml", false);
+        }
+        jobConfig = YamlConfiguration.loadConfiguration(jobFile);
+    }
 
+    private void loadRewards() {
+        jobsListener.hunterXP.clear();
+        if (jobConfig.contains("hunter-rewards")) {
+            for (String key : jobConfig.getConfigurationSection("hunter-rewards").getKeys(false)) {
+                try {
+                    // Convert String to EntityType (e.g., "ZOMBIE" -> EntityType.ZOMBIE)
+                    EntityType type = EntityType.valueOf(key.toUpperCase());
+                    int xp = jobConfig.getInt("hunter-rewards." + key);
+
+                    jobsListener.hunterXP.put(type, xp);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Skipping '" + key + "': Not a valid Entity (hunter)!");
+                }
+            }
+        }
+        plugin.getLogger().info("Successfully loaded " + jobsListener.hunterXP.size() + " mob rewards. (hunter)");
+
+        jobsListener.minerXP.clear();
+        if (jobConfig.contains("miner-rewards")) {
+            for (String key : jobConfig.getConfigurationSection("miner-rewards").getKeys(false)) {
+                try {
+                    Material mat = Material.valueOf(key.toUpperCase());
+                    double xp = jobConfig.getDouble("miner-rewards." + key);
+                    jobsListener.minerXP.put(mat, xp);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Skipping '" + key + "': Not a valid Minecraft Material! (miner)");
+                }
+            }
+        }
+        plugin.getLogger().info("Successfully loaded " + jobsListener.minerXP.size() + " miner block rewards.");
+
+        jobsListener.cropXP.clear();
+        if (jobConfig.contains("crop-rewards")) {
+            for (String key : jobConfig.getConfigurationSection("crop-rewards").getKeys(false)) {
+                try {
+                    Material mat = Material.valueOf(key.toUpperCase());
+                    double xp = jobConfig.getDouble("crop-rewards." + key);
+                    jobsListener.cropXP.put(mat, xp);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Skipping '" + key + "': Not a valid Minecraft Material! (crop)");
+                }
+            }
+        }
+        plugin.getLogger().info("Successfully loaded " + jobsListener.cropXP.size() + " farmer crop rewards.");
+
+        jobsListener.breedXP.clear();
+        if (jobConfig.contains("breed-rewards")) {
+            for (String key : jobConfig.getConfigurationSection("breed-rewards").getKeys(false)) {
+                try {
+                    EntityType type = EntityType.valueOf(key.toUpperCase());
+                    double xp = jobConfig.getDouble("breed-rewards." + key);
+                    jobsListener.breedXP.put(type, xp);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Skipping '" + key + "': Not a valid Entity (breed)");
+                }
+            }
+        }
+        plugin.getLogger().info("Successfully loaded " + jobsListener.breedXP.size() + " farmer breed rewards.");
+    }
 
     public JobsPlugin(MainPlugin plugin) {
         this.plugin = plugin;
